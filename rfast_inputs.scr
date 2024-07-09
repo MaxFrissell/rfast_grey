@@ -28,7 +28,7 @@ mmri      = False            # True -> inputs are mass mixing ratios | False -> 
 #
 # parameters defining thermal structure model
 #
-tpars     = 294.      # atmospheric temperature, assumed isotherm in rfast_user_models
+tpars     = 250.      # atmospheric temperature, assumed isotherm in rfast_user_models
 rdtmp     = False     # read temperature-pressure profile from file? otherwise isotherm at t0
 fntmp     = icrccm_62_v2.atm # filename for reading in gas vmr profiles
 skptmp    = 11        # header lines to skip in thermal structure file
@@ -39,11 +39,11 @@ psclt     = 1.        # parameter to multiply fntmp pressure by to scale to Pa
 # define line and cia absorbers
 #
 species_l = ch4,co2,h2o,o2,o3,n2o,co # line absorber species to include: ch4,co2,h2o,o2,o3,n2o,co,h2,n2,so2,nh3,c2h2
-species_c = n2,o2                    # cia cases to include: co2,h2,n2,o2
+species_c = n2,o2,co2                # cia cases to include: co2,h2,n2,o2
 #
 # wavelength grid parameters
 #
-lams      = 0.2,0.4,1.0   # short wavelength cutoff (um)
+lams      = 0.25,0.4,1.0   # short wavelength cutoff (um)
 laml      = 0.4,1.0,1.8   # long wavelength cutoff (um)
 res       = 7,140,70      # spectral resolving power (lam/dlam)
 regrid    = True     # use input spectral grid, or generate new?
