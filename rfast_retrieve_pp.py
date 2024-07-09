@@ -193,6 +193,7 @@ if clr:
 
 #define priors for retreived parameters (from previous code added january 11th)
 gaslower,   gasupper   = 10**(-2.0), 10**(7.0)
+tracelower             = 10**(-12.0) # Adding so trace gases are in prior range
 pmaxlower,  pmaxupper  = 1.,         1.e7
 A0lower,    A0upper    = 0.01,       1.
 #A1lower,    A1upper    = 0.01,       1. #for land fraction surface albedo model
@@ -204,6 +205,7 @@ tauc0lower, tauc0upper = 0.001,      1000.
 fclower,    fcupper    = 0.001,      1.
 
 lgaslower,   lgasupper   = np.log10(gaslower),   np.log10(gasupper)
+ltracelower              = np.log10(tracelower)
 lpmaxlower,  lpmaxupper  = np.log10(pmaxlower),  np.log10(pmaxupper)
 lA0lower,    lA0upper    = np.log10(A0lower),    np.log10(A0upper)
 #lA1lower,    lA1upper    = np.log10(A1lower),    np.log10(A1upper) #for more than one albedo parameter
@@ -242,11 +244,11 @@ def lnprior(x):
 
   # prior limits modified from previous code january 11th
   if lgaslower   <= lpN2  <= lgasupper   and \
-     lgaslower   <= lpO2  <= lgasupper   and \
+     ltracelower   <= lpO2  <= lgasupper   and \
      lgaslower   <= lpH2O <= lgasupper   and \
-     lgaslower   <= lpO3  <= lgasupper   and \
+     ltracelower   <= lpO3  <= lgasupper   and \
      lgaslower   <= lpCO2 <= lgasupper   and \
-     lgaslower   <= lpCO  <= lgasupper   and \
+     ltracelower   <= lpCO  <= lgasupper   and \
      lgaslower   <= lpCH4 <= lgasupper   and \
      A0lower    <= A0    <= A0upper    and \
      Rplower    <= Rp    <= Rpupper    and \
@@ -381,7 +383,9 @@ def Fx(x,y):
 ##added from previously modified code on january 11th
 if __name__ == '__main__': #why do these have to be redefined if they were initialised outside a function previously
   gaslower,    gasupper    = 10**(-2.0),           10**(7.0)
+  tracelower               = 10**(-12)
   lgaslower,   lgasupper   = np.log10(gaslower),   np.log10(gasupper)
+  ltracelower              = np.log10(tracelower)
   lA0lower,    lA0upper    = np.log10(0.01),       np.log10(1.0)
   #lA1lower,    lA1upper    = np.log10(0.01),       np.log10(1.0)
   lRplower,    lRpupper    = np.log10(10**(-0.5)), np.log10(10.0**(0.5))
@@ -393,11 +397,11 @@ if __name__ == '__main__': #why do these have to be redefined if they were initi
   
 # initialize walkers in a uniform distribution of values within their prior range
   lpN2_pos   = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
-  lpO2_pos   = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
+  lpO2_pos   = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
   lpH2O_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
-  lpO3_pos   = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
+  lpO3_pos   = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
   lpCO2_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
-  lpCO_pos   = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
+  lpCO_pos   = [np.random.uniform(low=tracelower, high=lgasupper) for i in range(nwalkers)]
   lpCH4_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
   lA0_pos    = [np.random.uniform(low=lA0lower, high=lA0upper) for i in range(nwalkers)]
   #lA1_pos    = [np.random.uniform(low=lA1lower, high=lA1upper) for i in range(nwalkers)]
@@ -418,11 +422,11 @@ if __name__ == '__main__': #why do these have to be redefined if they were initi
   for i in range(nwalkers):
       while (pt_pos[i]+dpc_pos[i] >= pmax_pos[i]):
           lpN2_pos[i] = np.random.uniform(low=lgaslower, high=lgasupper)
-          lpO2_pos[i] = np.random.uniform(low=lgaslower, high=lgasupper)
+          lpO2_pos[i] = np.random.uniform(low=ltracelower, high=lgasupper)
           lpH2O_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
-          lpO3_pos[i]   = np.random.uniform(low=lgaslower, high=lgasupper)
+          lpO3_pos[i]   = np.random.uniform(low=ltracelower, high=lgasupper)
           lpCO2_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
-          lpCO_pos[i]   = np.random.uniform(low=lgaslower, high=lgasupper)
+          lpCO_pos[i]   = np.random.uniform(low=ltracelower, high=lgasupper)
           lpCH4_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
           lA0_pos[i]    = np.random.uniform(low=lA0lower, high=lA0upper)
           #lA1_pos[i]    = np.random.uniform(low=lA1lower, high=lA1upper)
