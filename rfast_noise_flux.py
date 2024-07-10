@@ -6,8 +6,8 @@ import numpy             as np
 import matplotlib.pyplot as plt
 from astropy.table       import Table, Column, MaskedColumn
 from astropy.io          import ascii
-from rfast_routines      import noise
-from rfast_routines      import inputs
+from rfast_routines_flux import noise
+from rfast_routines_flux import inputs
 
 # get input script filename
 if len(sys.argv) >= 2:
