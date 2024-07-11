@@ -76,7 +76,7 @@ F2_array = []
 
 data = pd.read_csv('grey_surfcerr_A0_0.1.csv', delim_whitespace = True)
 
-expected_F2 = np.array(data.albedo)
+expected_F2 = np.array(data.flux_ratio)
 expected_err = np.mean(data.uncertainty)
 
 r = random.sample(range(0, nstep*nwalkers), nsample)
@@ -197,9 +197,9 @@ ci_max   = []
 
 #when loading F2_array from a file
 if use_dat_file == True:
-    F1_array = pd.read_csv('F1_array_reshape.csv', header=0, index_col=0)
+    F2_array = pd.read_csv('F2_array_reshape.csv', header=0, index_col=0)
 
-F1_array = np.asarray(F1_array)
+F2_array = np.asarray(F2_array)
 
 #reshape the spectra planet-to-star flux ratios into rows for each case, and remove NaN values from array
 spectra_samples = F2_array.reshape((nsample,len(expected_F2)))
@@ -256,7 +256,7 @@ ax.plot(lam, ci_mid, color='b')
 ax.fill_between(lam, ci_upper, ci_lower, color='b',  alpha=0.33, label='95% CI')
 #ax.fill_between(lam, ci_max, ci_bot, color = 'xkcd:sky blue', alpha = 0.33, label='100% CI')
 
-plt.legend(['Expected Albedo', 'Median Albedo From 95% CI','95% CI'])
+plt.legend(['Expected Albedo', 'Constant Error', 'Median Albedo From 95% CI','95% CI'])
 plt.ylabel('Albedo')
 plt.xlabel('Wavelength ($\mu$m)')
 plt.grid(alpha = 0.5)
