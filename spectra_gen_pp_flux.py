@@ -72,10 +72,11 @@ flatchain = samples.reshape(samples.shape[0] * samples.shape[1], samples.shape[2
 #	flatchain[i] = real_values
 
 F1_array = []
+F2_array = []
 
 data = pd.read_csv('grey_surfcerr_A0_0.1.csv', delim_whitespace = True)
 
-expected_F1 = np.array(data.albedo)
+expected_F2 = np.array(data.flux_ratio)
 expected_err = np.mean(data.uncertainty)
 
 r = random.sample(range(0, nstep*nwalkers), nsample)
@@ -172,6 +173,7 @@ if use_dat_file == False:
 		F1   = kernel_convol(kern,F1_hr)
 		F2   = kernel_convol(kern,F2_hr)
 		F1_array.extend(F1)
+		F2_array.extend(F2)
 		
         	# timing
 		tend = time.time()
@@ -183,8 +185,8 @@ if use_dat_file == False:
 		ascii.write(data_out,'spectra_gen.raw',format='fixed_width',overwrite=True)
 
         	# plot raw spectrum
-		plt.plot(lam, F1, alpha = 0.05)
-        
+		#plt.plot(lam, F1, alpha = 0.05)
+        	#plt.plot(lam, F2, alpha = 0.05)
 ci_bot   = []
 ci_lower = []
 ci_mid   = []
@@ -195,28 +197,28 @@ ci_max   = []
 
 #when loading F2_array from a file
 if use_dat_file == True:
-    F1_array = pd.read_csv('F1_array_reshape.csv', header=0, index_col=0)
+    F2_array = pd.read_csv('F2_array_reshape.csv', header=0, index_col=0)
 
-F1_array = np.asarray(F1_array)
+F2_array = np.asarray(F2_array)
 
 #reshape the spectra planet-to-star flux ratios into rows for each case, and remove NaN values from array
-spectra_samples = F1_array.reshape((nsample,len(expected_F1)))
+spectra_samples = F2_array.reshape((nsample,len(expected_F2)))
 
 dat_rows, dat_cols = np.shape(spectra_samples)
 
 #saving the array to a csv file
 if use_dat_file == False:
-    F1_df = pd.DataFrame(spectra_samples)
-    F1_df.to_csv('F1_array_reshape.csv')
+    F2_df = pd.DataFrame(spectra_samples)
+    F2_df.to_csv('F2_array_reshape.csv')
 
-for j in range(0,len(expected_F1)):
+for j in range(0,len(expected_F2)):
     globals()['ci_bot_%s' % j]=scipy.stats.scoreatpercentile(spectra_samples[:,j], 0., interpolation_method='fraction',axis=0)
     globals()['ci_lower_%s' % j]=scipy.stats.scoreatpercentile(spectra_samples[:,j], 2.5, interpolation_method='fraction',axis=0)
     globals()['ci_mid_%s' % j]=scipy.stats.scoreatpercentile(spectra_samples[:,j], 50.0, interpolation_method='fraction',axis=0)
     globals()['ci_upper_%s' % j]=scipy.stats.scoreatpercentile(spectra_samples[:,j], 97.5, interpolation_method='fraction',axis=0)
     globals()['ci_max_%s' % j]=scipy.stats.scoreatpercentile(spectra_samples[:,j], 100., interpolation_method='fraction',axis=0)
     
-for q in range(0,len(expected_F1)):
+for q in range(0,len(expected_F2)):
     ci_bot.append(globals()['ci_bot_%s' % q])
     ci_lower.append(globals()['ci_lower_%s' % q])
     ci_mid.append(globals()['ci_mid_%s' % q])
@@ -226,14 +228,14 @@ for q in range(0,len(expected_F1)):
 ci_avg = np.add(ci_lower,ci_upper) / 2
 
 lam         = np.asarray(lam)
-expected_F1 = np.asarray(expected_F1)
+expected_F2 = np.asarray(expected_F2)
 
-expected_err_lower = [v - 2*expected_err for v in expected_F1]
-expected_err_upper = [v + 2*expected_err for v in expected_F1]
+expected_err_lower = [v - 2*expected_err for v in expected_F2]
+expected_err_upper = [v + 2*expected_err for v in expected_F2]
 
 if use_dat_file == True:
 	for num in range(0,dat_rows):
-		plt.plot(lam, expected_F1, color = 'red')
+		plt.plot(lam, expected_F2, color = 'red')
 		plt.plot(lam,spectra_samples[num,:])
 		plt.ylabel('Albedo')
 		plt.xlabel('Wavelength ($\mu$m)')
@@ -244,7 +246,7 @@ if use_dat_file == True:
         
 ax = plt.subplot(1,1,1)
 
-ax.plot(lam, expected_F1, color='r')
+ax.plot(lam, expected_F2, color='r')
 #ax.plot(lam, ci_avg, color = 'g')
 #ax.errorbar(lam, expected_F2, yerr=expected_err, color = 'r', ecolor='r', linestyle ='-')
 ax.fill_between(lam, expected_err_upper, expected_err_lower, color = 'r', alpha = 0.5)
@@ -254,7 +256,7 @@ ax.plot(lam, ci_mid, color='b')
 ax.fill_between(lam, ci_upper, ci_lower, color='b',  alpha=0.33, label='95% CI')
 #ax.fill_between(lam, ci_max, ci_bot, color = 'xkcd:sky blue', alpha = 0.33, label='100% CI')
 
-plt.legend(['Expected Albedo', 'Median Albedo From 95% CI','95% CI'])
+plt.legend(['Expected Albedo', 'Constant Error', 'Median Albedo From 95% CI','95% CI'])
 plt.ylabel('Albedo')
 plt.xlabel('Wavelength ($\mu$m)')
 plt.grid(alpha = 0.5)
