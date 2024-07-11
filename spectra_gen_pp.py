@@ -30,6 +30,8 @@ from rfast_user_models   import surfalb
 from rfast_user_models   import cloud_optprops
 from rfast_user_models   import cloud_struct
 
+nsample = 1000
+
 # read inputs
 filename_scr   = 'rfast_inputs.scr'
 fnr,fnn,fns,dirout,Nlev,pmin,pmax,bg,\
@@ -76,13 +78,13 @@ data = pd.read_csv('grey_surfcerr_A0_0.1.csv', delim_whitespace = True)
 expected_F1 = np.array(data.albedo)
 expected_err = np.mean(data.uncertainty)
 
-r = random.sample(range(0, nstep*nwalkers), 1000)
+r = random.sample(range(0, nstep*nwalkers), nsample)
 n2 = []
 
 print_vals = False
 use_dat_file = False
 if use_dat_file == False:
-	for i in range(0,1000):
+	for i in range(0,nsample):
 		print('Walker ',i)
 		print('Sample ',r[i], '\n')
 		print('Albedo length is ',len(F1_array), '\n')
@@ -198,7 +200,7 @@ if use_dat_file == True:
 F1_array = np.asarray(F1_array)
 
 #reshape the spectra planet-to-star flux ratios into rows for each case, and remove NaN values from array
-spectra_samples = F1_array.reshape((1000,len(expected_F1)))
+spectra_samples = F1_array.reshape((nsample,len(expected_F1)))
 
 dat_rows, dat_cols = np.shape(spectra_samples)
 
