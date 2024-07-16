@@ -39,7 +39,7 @@ psclt     = 1.        # parameter to multiply fntmp pressure by to scale to Pa
 # define line and cia absorbers
 #
 species_l = ch4,co2,h2o,o2,o3,n2o,co # line absorber species to include: ch4,co2,h2o,o2,o3,n2o,co,h2,n2,so2,nh3,c2h2
-species_c = n2,o2,co2                # cia cases to include: co2,h2,n2,o2
+species_c = co2,n2,o2                # cia cases to include: co2,h2,n2,o2
 #
 # wavelength grid parameters
 #
