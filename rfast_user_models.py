@@ -339,6 +339,7 @@ def cloud_struct(cpars,cld,p,t,z,grav,f,fb,m):
   
 # Surface alb function that does not read from files every time
 # Takes in granite, ocean, and basalt data read from the files as parameters
+'''
 def surfalb_fast(Apars,lam,granite,open_ocean,weathered_basalt): 
 
   ########################
@@ -411,8 +412,8 @@ def surfalb_fast(Apars,lam,granite,open_ocean,weathered_basalt):
   ########################
 
   return As, surface_1, surface_2, surface_3, name1, name2, name3
-  
-  
+'''
+
 # Cloud optical properties function that doesn't read from files every call
 # Takes liquid and ice cloud data read from files as parameters
 def cloud_optprops_fast(opars,cld,opdir,lam,liq_data,ice_data):

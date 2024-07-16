@@ -26,7 +26,7 @@ from rfast_opac_routines import opacities_info
 from rfast_user_models   import surfalb
 from rfast_user_models   import cloud_optprops
 from rfast_user_models   import cloud_struct
-from rfast_user_models   import surfalb_fast
+#from rfast_user_models   import surfalb_fast # Don't need
 from rfast_user_models   import cloud_optprops_fast
 
 ## FROM RFAST_ANALYZE_PP
