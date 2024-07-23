@@ -102,11 +102,11 @@ rnd       = False    # randomize error bars or simply center on truth?
 # parameters for retrieval calculation
 #
 nwalkers  = 100      # emcee, number of walkers
-nstep     = 100000   # emcee, number of steps
-nburn     = 50000    # emcee, number of burn-in steps; negative -> count from end
+nstep     = 200000   # emcee, number of steps
+nburn     = 100000   # emcee, number of burn-in steps; negative -> count from end
 thin      = 100      # emcee, thinning parameter
 clr       = False    # if true, retrieval operates in center-log ratio
 fmin      = 1e-12    # minimim mixing ratio for clr priors, benneke & seager (2012)
 mmrr      = False    # if true, retrieval operates in mass mixing ratios
-progress  = True     # display emcee progress bar?
+progress  = False    # display emcee progress bar?
 restart   = False    # restart emcee from fn + '.h5' backends file?
