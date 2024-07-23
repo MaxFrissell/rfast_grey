@@ -286,7 +286,7 @@ for k in range(0,nit): #converting back to vmr
     for i in range(0,7):
         new_array[k,i] = np.log10(10**old_array[k,i]/pmax)
 
-'''
+
 fig = corner.corner(new_array, quantiles=[0.16, 0.5, 0.84],show_titles=True,
                     color='xkcd:black', labels=vmr_names, truths=vmr_truths)
 fig.savefig('corner_plots/_corner_VMR.png',format='png', bbox_inches='tight')
@@ -330,7 +330,7 @@ gp_vmr_array[:,7] = new_array[:,14]
 fig = corner.corner(gp_vmr_array, quantiles=[0.16, 0.5, 0.84],show_titles=True, color='xkcd:black', labels=vmr_gp_names, truths=vmr_gp_truths)
 fig.savefig('corner_plots/_corner_VMR_gp.png',format='png',bbox_inches='tight')
 plt.close(fig)
-'''
+
 # plot best-fit model and residuals
 gp = -1 # reverts to using Mp if gp not retrieved
 
