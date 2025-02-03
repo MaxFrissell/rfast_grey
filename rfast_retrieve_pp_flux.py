@@ -192,9 +192,9 @@ if clr:
   ximax = (n-1)/n*(np.log(1-n*fmin) - np.log(fmin))
 
 #define priors for retreived parameters (from previous code added january 11th)
-gaslower,   gasupper   = 10**(-2.0), 10**(7.0)
+gaslower,   gasupper   = 10**(-2.0), 10**(8.0)
 tracelower             = 10**(-12.0) # Adding so trace gases are in prior range
-pmaxlower,  pmaxupper  = 1.,         1.e7
+pmaxlower,  pmaxupper  = 1.,         1.e8
 A0lower,    A0upper    = 0.01,       1.
 #A1lower,    A1upper    = 0.01,       1. #for land fraction surface albedo model
 Rplower,    Rpupper    = 10**(-0.5), 10**(0.5)
@@ -245,11 +245,11 @@ def lnprior(x):
   # prior limits modified from previous code january 11th
   if lgaslower   <= lpN2  <= lgasupper   and \
      ltracelower   <= lpO2  <= lgasupper   and \
-     lgaslower   <= lpH2O <= lgasupper   and \
+     ltracelower   <= lpH2O <= lgasupper   and \
      ltracelower   <= lpO3  <= lgasupper   and \
      lgaslower   <= lpCO2 <= lgasupper   and \
      ltracelower   <= lpCO  <= lgasupper   and \
-     lgaslower   <= lpCH4 <= lgasupper   and \
+     ltracelower   <= lpCH4 <= lgasupper   and \
      A0lower    <= A0    <= A0upper    and \
      Rplower    <= Rp    <= Rpupper    and \
      Mplower    <= Mp    <= Mpupper    and \
@@ -382,7 +382,7 @@ def Fx(x,y):
 # syntax to identify main core of program
 ##added from previously modified code on january 11th
 if __name__ == '__main__': #why do these have to be redefined if they were initialised outside a function previously
-  gaslower,    gasupper    = 10**(-2.0),           10**(7.0)
+  gaslower,    gasupper    = 10**(-2.0),           10**(8.0)
   tracelower               = 10**(-12)
   lgaslower,   lgasupper   = np.log10(gaslower),   np.log10(gasupper)
   ltracelower              = np.log10(tracelower)
@@ -398,11 +398,11 @@ if __name__ == '__main__': #why do these have to be redefined if they were initi
 # initialize walkers in a uniform distribution of values within their prior range
   lpN2_pos   = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
   lpO2_pos   = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
-  lpH2O_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
+  lpH2O_pos  = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
   lpO3_pos   = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
   lpCO2_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
   lpCO_pos   = [np.random.uniform(low=tracelower, high=lgasupper) for i in range(nwalkers)]
-  lpCH4_pos  = [np.random.uniform(low=lgaslower, high=lgasupper) for i in range(nwalkers)]
+  lpCH4_pos  = [np.random.uniform(low=ltracelower, high=lgasupper) for i in range(nwalkers)]
   lA0_pos    = [np.random.uniform(low=lA0lower, high=lA0upper) for i in range(nwalkers)]
   #lA1_pos    = [np.random.uniform(low=lA1lower, high=lA1upper) for i in range(nwalkers)]
   lRp_pos    = [np.random.uniform(low=lRplower, high=lRpupper) for i in range(nwalkers)]
@@ -423,11 +423,11 @@ if __name__ == '__main__': #why do these have to be redefined if they were initi
       while (pt_pos[i]+dpc_pos[i] >= pmax_pos[i]):
           lpN2_pos[i] = np.random.uniform(low=lgaslower, high=lgasupper)
           lpO2_pos[i] = np.random.uniform(low=ltracelower, high=lgasupper)
-          lpH2O_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
+          lpH2O_pos[i]  = np.random.uniform(low=ltracelower, high=lgasupper)
           lpO3_pos[i]   = np.random.uniform(low=ltracelower, high=lgasupper)
           lpCO2_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
           lpCO_pos[i]   = np.random.uniform(low=ltracelower, high=lgasupper)
-          lpCH4_pos[i]  = np.random.uniform(low=lgaslower, high=lgasupper)
+          lpCH4_pos[i]  = np.random.uniform(low=ltracelower, high=lgasupper)
           lA0_pos[i]    = np.random.uniform(low=lA0lower, high=lA0upper)
           #lA1_pos[i]    = np.random.uniform(low=lA1lower, high=lA1upper)
           pmax_pos[i]  = 10**lpN2_pos[i]+10**lpO2_pos[i]+10**lpH2O_pos[i]+10**lpO3_pos[i]+10**lpCO2_pos[i]+10**lpCO_pos[i]+10**lpCH4_pos[i]
