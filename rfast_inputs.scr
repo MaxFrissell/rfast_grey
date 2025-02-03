@@ -14,10 +14,10 @@ src       = diff     # source type: 'diff','thrm','scnd','cmbn','trns','phas'
 #
 Nlev      = 50       # number of atmospheric levels
 pmin      = 1.00e0   # top of atmosphere pressure (Pa)
-pmax      = 1.01e5   # bottom of atmosphere pressure (Pa)
-bg        = n2       # background gas ('ar','ch4','co2','h2','he','n2','o2')
+pmax      = 9.26e6   # bottom of atmosphere pressure (Pa)
+bg        = co2       # background gas ('ar','ch4','co2','h2','he','n2','o2')
 species_r = n2,o2,h2o,o3,co2,co,ch4                   # radiatively-active species; from: ar,n2,o2,h2o,o3,co2,ch4,h2,he,n2o,co,so2,nh3,c2h2
-f0        = 0.78,0.21,3.e-3,7.e-7,4.e-4,1e-8,2.e-6      # vmrs for active gases; **same order as species_r**
+f0        = 0.035,1.7e-8,2.6e-5,6.3e-14,0.9647,2.3e-5,9.1e-17      # vmrs for active gases; **same order as species_r**
 rdgas     = False            # read gas volume mixing ratio profiles from file?
 fnatm     = icrccm_62_v2.atm # filename for reading in gas vmr profiles
 skpatm    = 11               # header lines to skip in atm file
@@ -28,7 +28,7 @@ mmri      = False            # True -> inputs are mass mixing ratios | False -> 
 #
 # parameters defining thermal structure model
 #
-tpars     = 250.      # atmospheric temperature, assumed isotherm in rfast_user_models
+tpars     = 700.      # atmospheric temperature, assumed isotherm in rfast_user_models
 rdtmp     = False     # read temperature-pressure profile from file? otherwise isotherm at t0
 fntmp     = icrccm_62_v2.atm # filename for reading in gas vmr profiles
 skptmp    = 11        # header lines to skip in thermal structure file
@@ -44,23 +44,23 @@ species_c = co2,n2,o2                # cia cases to include: co2,h2,n2,o2
 # wavelength grid parameters
 #
 lams      = 0.25,0.4,1.0   # short wavelength cutoff (um)
-laml      = 0.4,1.0,1.8   # long wavelength cutoff (um)
+laml      = 0.4,1.0,2.0   # long wavelength cutoff (um)
 res       = 7,140,70      # spectral resolving power (lam/dlam)
 regrid    = True     # use input spectral grid, or generate new?
 smpl      = 10.      # factor to oversample by in monochromatic calculation
-opdir     =          # path to hi-res opacities folder
+opdir     = /mmfs1/gscratch/vsm/frissell/hires_opacities/         # path to hi-res opacities folder
 #
 # key planetary parameters
 #
-Rp        = 1.0      # planet radius (Re)
-Mp        = 1.0      # planet mass (Me)
+Rp        = 0.95      # planet radius (Re)
+Mp        = 0.815      # planet mass (Me)
 a         = 1.0      # orbit distance (au)
 Apars     = 0.1      # Wavelength independent surface albedo
 em        = 1.0      # surface emissivity
 #
 # parameters defining cloud model
 #
-cld       = True          # include cloud?
+cld       = False         # include cloud?
 phfc      = 0             # 0 = HG | 1 = TTHG cloud phase function; only if 'phas'
 opars     =               # cloud optics properties, assumed 50/50 liquid/ice water in rfast_user_models
 cpars     = 6.e4,1.e4,10. # cloud vertical structure parameters; pt,dpc,tauc0, see rfast_user_models
@@ -95,15 +95,15 @@ Rs        = 1.0      # host star radius (Rsun)
 # parameters for noise calculation
 #
 ntype     = cerr     # noise type: 'csnr','cnse','cerr','plan','ezod','leak','detr','cppm'
-snr0      = 20.      # SNR at lam0; can have same no. of entries as res
+snr0      = 40.      # SNR at lam0; can have same no. of entries as res
 lam0      = 1.       # (um); can have same no. of entries as res
 rnd       = False    # randomize error bars or simply center on truth?
 #
 # parameters for retrieval calculation
 #
 nwalkers  = 100      # emcee, number of walkers
-nstep     = 200000   # emcee, number of steps
-nburn     = 100000   # emcee, number of burn-in steps; negative -> count from end
+nstep     = 100000   # emcee, number of steps
+nburn     = 50000    # emcee, number of burn-in steps; negative -> count from end
 thin      = 100      # emcee, thinning parameter
 clr       = False    # if true, retrieval operates in center-log ratio
 fmin      = 1e-12    # minimim mixing ratio for clr priors, benneke & seager (2012)
