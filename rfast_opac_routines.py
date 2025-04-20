@@ -26,7 +26,7 @@ from astropy.io import ascii
 #   "if" check and repeat the logic for the new CIA file. for a wholly new 
 #   species, and a new "elif" check and update the logic.
 #
-def cia_read(species,lam,opdir):
+def cia_read(species,lam,datdir):
 
   # uniform temperature grid to interpolate onto
   temp = [50.,75.,100.,200.,300.,400.,500.,750.,1000.]
@@ -40,10 +40,10 @@ def cia_read(species,lam,opdir):
   # gas and partner info (must agree with read-in order below)
   # first entry is the absorber and subsequent entries are partners
   ciaid0  = np.transpose(np.array([ ['     ']*(max(ncia0)+1) for i in range(ngas)]))
-  ciaid0[0:2,0] = ['co2','co2']
-  ciaid0[0:3,1] = ['h2','h2','he']
-  ciaid0[0:2,2] = ['n2','n2']
-  ciaid0[0:4,3] = ['o2','o2','n2','x']
+  ciaid0[0:ncia0[0]+1,0] = ['co2','co2']
+  ciaid0[0:ncia0[1]+1,1] = ['h2','h2','he']
+  ciaid0[0:ncia0[2]+1,2] = ['n2','n2']
+  ciaid0[0:ncia0[3]+1,3] = ['o2','o2','n2','x']
 
   # determine number of cia cases
   icia    = 0
@@ -66,15 +66,17 @@ def cia_read(species,lam,opdir):
 
       # read data
       fn              = 'CO2-CO2_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp    = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # update cia counter
       icia = icia + ncia0[0]
@@ -83,27 +85,31 @@ def cia_read(species,lam,opdir):
 
       # read data
       fn              = 'H2-H2_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp     = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # read data
       fn              = 'H2-He_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp       = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia+1,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # update cia counter
       icia = icia + ncia0[1]
@@ -112,15 +118,17 @@ def cia_read(species,lam,opdir):
 
       # read data
       fn              = 'N2-N2_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp     = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # update cia counter
       icia = icia + ncia0[2]
@@ -129,51 +137,59 @@ def cia_read(species,lam,opdir):
 
       # read data
       fn              = 'O2-O2_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp     = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # read data
       fn              = 'O2-O2_abs_Herzberg.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # copy onto temp (only one temperature point)
       cia0 = np.squeeze(cia0)
       cia0 = np.repeat(cia0[np.newaxis,:], len(temp), axis=0)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp       = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia,:,:]   = kcia[icia,:,:] + cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # read data
       fn              = 'O2-N2_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # copy onto temp (only one temperature point)
       cia0 = np.squeeze(cia0)
       cia0 = np.repeat(cia0[np.newaxis,:], len(temp), axis=0)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp       = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia+1,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # read data
       fn              = 'O2-X_abs.cia'
-      temp0,lam0,cia0 = read_cia(opdir+fn)
+      temp0,lam0,cia0 = read_cia(datdir+fn)
 
       # interpolate onto temp
       cia_interp = interpolate.interp1d(temp0,cia0,axis=0,assume_sorted=True,fill_value="extrapolate")
       cia0       = cia_interp(temp)
+      cia0[np.where(cia0<=0)] = 0. # interpolated values cannot be less than zero
 
       # interpolate onto lam
       cia_interp       = interpolate.interp1d(lam0,cia0,axis=1,fill_value="extrapolate")
       kcia[icia+2,:,:] = cia_interp(lam)
+      kcia[np.where(kcia<=0)] = 0. # interpolated values cannot be less than zero
 
       # update cia counter
       icia = icia + ncia0[3]
